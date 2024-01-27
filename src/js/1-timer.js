@@ -42,13 +42,15 @@ const fp = flatpickr(myInput, options);
 
 startBtn.addEventListener('click', () => {
   startBtn.disabled = true;
+  startBtn.style.background = '#CFCFCF';
+  startBtn.style.color = '#989898';
   difference = userSelectedDate - Date.now();
   const countdownInterval = setInterval(() => {
     difference = userSelectedDate - Date.now();
 
     if (difference <= 0) {
       clearInterval(countdownInterval);
-      startBtn.disabled = false;
+      startBtn.disabled = true;
     } else {
       const { days, hours, minutes, seconds } = convertMs(difference);
       day.textContent = `${formatTimeUnit(days)}`;
