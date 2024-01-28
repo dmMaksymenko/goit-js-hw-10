@@ -15,13 +15,17 @@ let date = Date.now();
 let userSelectedDate;
 let difference;
 
+function enableStartButton() {
+  startBtn.disabled = false;
+  startBtn.style.background = '#4E75FF';
+  startBtn.style.color = '#FFF';
+}
 const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    // console.log(selectedDates[0]);
     userSelectedDate = selectedDates[0];
     if (userSelectedDate < date) {
       iziToast.show({
@@ -30,15 +34,14 @@ const options = {
         position: 'topRight',
         icon: 'ico-error',
       });
+      startBtn.disabled = true;
     } else {
-      startBtn.disabled = false;
-      startBtn.style.background = '#4E75FF';
-      startBtn.style.color = '#FFF';
+      enableStartButton();
     }
   },
 };
 
-const fp = flatpickr(myInput, options);
+flatpickr(myInput, options);
 
 startBtn.addEventListener('click', () => {
   startBtn.disabled = true;
@@ -47,10 +50,13 @@ startBtn.addEventListener('click', () => {
   difference = userSelectedDate - Date.now();
   const countdownInterval = setInterval(() => {
     difference = userSelectedDate - Date.now();
+    myInput.disabled = true;
 
     if (difference <= 0) {
       clearInterval(countdownInterval);
       startBtn.disabled = true;
+      enableStartButton();
+      myInput.disabled = false;
     } else {
       const { days, hours, minutes, seconds } = convertMs(difference);
       day.textContent = `${formatTimeUnit(days)}`;
